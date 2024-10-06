@@ -1,31 +1,23 @@
-import { StyleSheet } from 'react-native';
+import React from "react";
+import { useCourses } from "@/features/courses/hooks/useCourses";
+import AllCoursesGrid from "@/features/courses/components/AllCoursesGrid";
+import ContinieLearningGrid from "@/features/courses/components/ContinueLearningGrid";
+import { View } from "react-native";
+import Spacing from "@/features/theme/constants/spacing";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+const HomeSreen = () => {
+  const { courses, loading, error } = useCourses();
 
-export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View style={{ gap: Spacing.lg }}>
+      <ContinieLearningGrid
+        courses={courses.slice(0, 1)}
+        loading={loading}
+        error={error}
+      />
+      <AllCoursesGrid courses={courses} loading={loading} error={error} />
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+export default HomeSreen;

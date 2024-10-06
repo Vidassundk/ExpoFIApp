@@ -1,57 +1,52 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import React from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
+import { TouchableOpacity, Text } from "react-native";
+import { useTheme } from "@/features/theme/hooks/useTheme";
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
+  name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { toggleTheme, theme, colors } = useTheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        headerRight: () => (
+          <TouchableOpacity onPress={toggleTheme} style={{ marginRight: 10 }}>
+            <Text style={{ color: colors.tint }}>
+              {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            </Text>
+          </TouchableOpacity>
+        ),
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "Home",
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="MyCoursesScreen"
+        options={{
+          title: "My Courses",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="bookmark" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="CommunityScreen"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Community",
+          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
         }}
       />
     </Tabs>
